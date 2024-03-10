@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+{% extends "core.html" %} {% load static %} 
+{% block title %} <title>Comprar</title> {% endblock %}
+
+{% block scripts %}
+  <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
+  <script
+    async
+    src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=console.debug&libraries=maps,marker&v=beta"
+  ></script>
+{% endblock %}
+
+{% block content %}
+  <div class="container pb-5">
+    <div class="row">
+      <div class="col-6">
+        <div class="row">
+          <form id="form" method="post">
+            {% csrf_token %}
+            <h1>Detalles de envio</h1>
+
+            <label for="nombre_completo" class="form-label"
+              >Nombre Completo:</label
+            >
+            <input
+              type="text"
+              id="nombre_completo"
+              name="nombre_completo"
+              class="form-control"
+              required
+            />
+
+            <label for="correo_electronico" class="form-label"
+              >Correo Electronico:</label
+            >
+            <input
+              type="text"
+              id="correo_electronico"
+              name="correo_electronico"
+              class="form-control"
+              required
+            />
+
+            <label for="telefono" class="form-label">Telefono:</label>
+            <input
+              type="text"
+              id="telefono"
+              name="telefono"
+              class="form-control"
+              required
+            />
+
+            <label for="direccion" class="form-label">Direccion:</label>
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              class="form-control"
+              required
+            />
+
+            <h1>Informacion de Pago</h1>
+
+            <label for="numero_de_tarjeta" class="form-label"
+              >Numero de tarjeta:</label
+            >
+            <input
+              type="text"
+              id="numero_de_tarjeta"
+              name="numero_de_tarjeta"
+              class="form-control"
+              required
+            />
+
+            <label for="fecha_de_expedicion" class="form-label"
+              >Fecha de Expedicion:</label
+            >
+            <input
+              type="text"
+              id="fecha_de_expedicion"
+              name="fecha_de_expedicion"
+              class="form-control"
+              required
+            />
+
+            <label for="ccv" class="form-label">CCV:</label>
+            <input
+              type="text"
+              id="ccv"
+              name="ccv"
+              class="form-control"
+              required
+            />
+
+            <input
+              class="btn btn-primary mt-3"
+              type="submit"
+              value="Comprar"
+              name="pagar"
+            />
+          </form>
+        </div>
+      </div>
+      <div class="col-6 p-5">
+        <gmp-map
+          center="4.651655197143555,-74.06298065185547"
+          zoom="14"
+          map-id="DEMO_MAP_ID"
+        >
+          <gmp-advanced-marker
+            position="4.651655197143555,-74.06298065185547"
+            title="My location"
+          >
+          </gmp-advanced-marker>
+        </gmp-map>
+      </div>
+    </div>
+  </div>
+{% endblock %}

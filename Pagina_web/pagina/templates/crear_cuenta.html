@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% extends "core.html" %} {% load static %} 
+{% block title %} <title>Crear Cuenta</title> {% endblock %}
+
+{% block scripts %}
+  <link rel="stylesheet" href="{% static '/css/estilo_sesion.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="container pt-5 mt-5">
+    <div class="row">
+      <div class="col-lg-10 col-xl-6 mx-auto">
+        <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+          <div class="card-body p-4 p-sm-5">
+            <h5 class="card-title text-center mb-5 fw-light fs-5">Registro</h5>
+            <form method="post">
+              {% csrf_token %}
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInputUsername" name="usuario" placeholder="Usuario" required autofocus>
+                <label for="floatingInputUsername">Usuario</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInputEmail" placeholder="name@example.com" name="email">
+                <label for="floatingInputEmail">Email</label>
+              </div>
+
+              <hr>
+
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Contraseña" name ="contrasena">
+                <label for="floatingPassword">Contraseña</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingPasswordConfirm" placeholder="Confirmar Contraseña" name="contrasena_repetida">
+                <label for="floatingPasswordConfirm">Repetir Contraseña</label>
+              </div>
+
+
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+
+              <h5 class="text-center mb-4 fw-light">{{ temp }}</h5>
+
+
+              <div class="d-grid mb-2">
+                <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit">Registrar</button>
+              </div>
+
+              <a class="d-block text-center mt-2 small" href="{% url 'iniciar_sesion' %}">Tienes una cuenta? Inicia Sesion</a>
+
+              <hr class="my-4">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

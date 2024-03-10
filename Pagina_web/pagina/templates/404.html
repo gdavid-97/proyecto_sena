@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codigo 404</title>
+    <link rel="stylesheet" href="{% static '/css/estilo_404.css' %}">
+</head>
+<body id="page-container">
+
+  <header>
+    <a href="{% url 'home' %}" class="logo">VoxNova</a>
+    <ul class="nav">
+      <li><a href="{% url 'comprar' %}" class="nav_2">Comprar</a></li>
+      <li><a href="{% url 'sugerencias' %}" class="nav_3">Sugerencias</a></li>
+      <li><a href="{% url 'contacto' %}" class="nav_3">Contáctenos</a></li>
+    </ul>
+    <ul class="btn_grupo">
+      <li>
+        <a href="{% url 'iniciar_sesion' %}" class="btnlogin"
+          >Iniciar Sesion</a
+        >
+      </li>
+      <li>
+        <a href="{% url 'crear_cuenta' %}" class="btnregistro"
+          >Registrarse</a
+        >
+      </li>
+    </ul>
+  </header>
+
+    <section class="contenido">
+        <div class="error404">
+            <span>4</span>
+            <span>0</span>
+            <span>4</span>
+        </div>
+        <h2>Pagina no encontrada</h2>
+    </section>
+
+    <footer>
+      <ul class="enlaces">
+        <li><a href="{% url 'contacto' %}" class="nav_3">Contáctenos</a></li>
+        <li><a href="{% url 'sugerencias' %}" class="nav_3">Sugerencias</a></li>
+      </ul>
+      <ul class="enlaces">
+        <li><a class="m-2" href="{% url 'home' %}"><img src="{% static 'img/Twitter1.png'%}" width="24" height="24"></a></li>
+        <li><a class="m-2" href="{% url 'home' %}"><img src="{% static 'img/facebook1.png'%}" width="24" height="24"></a></li>
+        <li><a class="m-2" href="{% url 'home' %}"><img src="{% static 'img/instagram1.png'%}" width="24" height="24"></a></li>
+      </ul>
+    </footer>
+</body>
+</html>

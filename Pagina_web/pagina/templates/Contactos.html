@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% extends "core.html" %} {% load static %} 
+{% block title %} <title>Contacto</title> {% endblock %}
+
+{% block scripts %}
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}" />
+  <script
+    async
+    src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=console.debug&libraries=maps,marker&v=beta"
+  ></script>
+{% endblock %}
+
+{% block content %}
+<div class="cuerpo pt-5 mt-5">
+  <div class="container text-center pt-5 mt-5">
+    <div class="row align-items-center">
+      <div class="col-6 justify-content-center">
+        <h3>
+          Nuestra misión es impulsar la eficiencia y mejorar la calidad de
+          vida a través de la creación de asistentes inteligentes. Nos
+          dedicamos a desarrollar tecnologías innovadoras que simplifican
+          tareas cotidianas, fomentan la conectividad y ofrecen soluciones
+          personalizadas para satisfacer las diversas necesidades de nuestros
+          usuarios. Inspirando la confianza y la comodidad en la forma en que
+          las personas interactúan con la tecnología.
+        </h3>
+      </div>
+      <div class="col-6 justify-content-center">
+        <img src="{% static 'img/b1.png' %}" class="img-fluid" />
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-6 justify-content-center">
+        <img src="{% static 'img/c1.png' %}" class="img-fluid" />
+      </div>
+      <div class="col-6 justify-content-center">
+        <h3>
+          Creamos asistentes virtuales que van más allá de las expectativas,
+          transformando la forma en que vives y trabajas. Nos esforzamos por
+          ser el compañero inteligente que simplifica tu día a día, anticipa
+          tus necesidades y se adapta a tu estilo de vida. Con cada
+          innovación, construimos un puente hacia un futuro donde la
+          tecnología mejora y enriquece cada aspecto de tu existencia.
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="container text-center">
+    <div class="row pt-5">
+      <h2>DATOS DE CONTACTO</h2>
+      <div class="col-6 justify-content-center">
+        <div class="row align-items-center">
+          <div>
+            <img src="{% static 'img/icono.png' %}" height="50"/>
+            <h3 class="pt-5">
+              Telfono: 3023205337 
+            </h3>
+            <h3>
+              Direccion: Calle 13 #65
+            </h3>
+            <h3>
+              E-mail: voxnova@gmail.com
+            </h3>
+            <h3>
+              Horario: Lunes a viernes, 10 am a 5 pm
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 p-5">
+        <gmp-map
+          center="4.651655197143555,-74.06298065185547"
+          zoom="14"
+          map-id="DEMO_MAP_ID"
+        >
+          <gmp-advanced-marker
+            position="4.651655197143555,-74.06298065185547"
+            title="My location"
+          >
+          </gmp-advanced-marker>
+        </gmp-map>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

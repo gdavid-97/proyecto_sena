@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block title %}
+    <title>VoxNova Inicio</title>
+    {% endblock %} {% block scripts %} {% endblock %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </head>
+  <body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark px-5">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img
+          src="{% static '/img/icono-s.png'%}"
+          width="50"
+          height="50"
+          class="d-inline-block align-top"
+          alt=""
+        />
+        Vox Nova
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarResponsive"
+        aria-controls="navbarResponsive"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarResponsive"W
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item px-2">
+            <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %} active {% else %} text-info {% endif %}"
+              >Inicio</a
+            >
+          </li>
+          <li class="nav-item px-2">
+            <a href="{% url 'comprar' %}" class="nav-link {% if request.path == '/comprar' %} active {% else %} text-info {% endif %}"
+              >Comprar</a
+            >
+          </li>
+          <li class="nav-item px-2">
+            <a href="{% url 'sugerencias' %}" class="nav-link {% if request.path == '/sugerencias' %} active {% else %} text-info {% endif %}"
+              >Sugerencias</a
+            >
+          </li>
+          <li class="nav-item px-2">
+            <a href="{% url 'contacto' %}" class="nav-link {% if request.path == '/contacto' %} active {% else %} text-info {% endif %}"
+              >Acerca de</a
+            >
+          </li>
+          {%if user.is_authenticated %}
+          <li class="nav-item px-2">
+            <a href="{% url 'crud' %}" class="nav-link {% if request.path == '/crud' %} active {% else %} text-info {% endif %}"
+              >Administracion</a
+            >
+          </li>
+          {%endif%}
+        </ul>
+
+        {%if user.is_authenticated %}
+
+        <div class="my-lg-0 ms-auto text-white d-flex ">
+          <p class="m-2">Hola {{user.username}}</p>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light">Salir</button>
+          </form>
+        </div>
+
+        {%else%}
+
+        <div class="my-lg-0 ms-auto">
+          <a href="{% url 'iniciar_sesion' %}" class="btn btn-light"
+            >Iniciar Sesion</a
+          >
+
+          <a href="{% url 'crear_cuenta' %}" class="btn btn-primary"
+            >Registrarse</a
+          >
+        </div>
+
+        {%endif%}
+
+      </div>
+    </nav>
+
+    {% block content %} {% endblock %}
+
+    <footer
+      class="d-flex flex-wrap justify-content-between align-items-center py-3 my-0 bg-dark"
+    >
+      <div class="container">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+          <li class="nav-item">
+            <a href="{% url 'home' %}" class="nav-link px-2 text-white"
+              >Inicio</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'comprar' %}" class="nav-link px-2 text-white"
+              >Comprar</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'sugerencias' %}" class="nav-link px-2 text-white"
+              >Sugerencias</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'contacto' %}" class="nav-link px-2 text-white"
+              >Acerca de</a
+            >
+          </li>
+        </ul>
+        <ul class="nav col-md-12 justify-content-center list-unstyled d-flex">
+          <li>
+            <a class="m-2" href="https://twitter.com/?lang=es"
+              ><img src="{% static 'img/Twitter1.png'%}" width="24" height="24"
+            /></a>
+          </li>
+          <li>
+            <a class="m-2" href="https://www.facebook.com"
+              ><img
+                src="{% static 'img/facebook1.png'%}"
+                width="24"
+                height="24"
+            /></a>
+          </li>
+          <li>
+            <a class="m-2" href="https://www.instagram.com/"
+              ><img
+                src="{% static 'img/instagram1.png'%}"
+                width="24"
+                height="24"
+            /></a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>

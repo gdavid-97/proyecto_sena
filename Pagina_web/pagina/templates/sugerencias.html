@@ -1,0 +1,126 @@
+{% extends "core.html" %} {% load static %} 
+{% block title %} <title>Home</title> {% endblock %}
+
+{% block scripts %}
+  <link rel="stylesheet" href="{% static '/css/estilo.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="cuerpo pt-5 mt-5">
+  <div class="container pb-5 pt-5">
+    <div class="row">
+      <div class="col-6">
+        <div class="row">
+          <form id="form" method="post">
+            {% csrf_token %}
+
+            <h1>Compartenos tus Sugerencias</h1>
+
+            <label for="nombre_completo" class="form-label"
+              >Nombre Completo:</label
+            >
+            <input
+              type="text"
+              id="nombre_completo"
+              name="nombre_completo"
+              class="form-control"
+            />
+
+            <label for="correo_electronico" class="form-label"
+              >Correo Electronico:</label
+            >
+            <input
+              type="email"
+              id="correo_electronico"
+              name="correo_electronico"
+              class="form-control"
+            />
+
+            <label for="telefono" class="form-label">Telefono:</label>
+            <input
+              type="text"
+              id="telefono"
+              name="telefono"
+              class="form-control"
+            />
+
+            <label for="direccion" class="form-label">Direccion:</label>
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              class="form-control"
+            />
+
+            <label for="mensaje" class="form-label">Mensaje:</label>
+            <textarea name="mensaje" rows="5" cols="30" class="form-control">
+            </textarea>
+
+            <input
+              class="btn btn-primary mt-3"
+              type="submit"
+              value="Enviar"
+              name="enviar"
+            />
+          </form>
+        </div>
+      </div>
+      <div class="col-6">
+        <div
+          id="carouselExampleInterval"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="10000">
+              <img
+                src="{% static 'img/sugerencia1.png' %}"
+                class="d-block w-100"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+              <img
+                src="{% static 'img/sugerencia2.png' %}"
+                class="d-block w-100"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{% static 'img/sugerencia3.png' %}"
+                class="d-block w-100"
+                alt="..."
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="prev"
+          >
+            <span
+              class="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="next"
+          >
+            <span
+              class="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% extends "core.html" %} {% load static %} 
+{% block title %} <title>CRUD</title> {% endblock %}
+
+
+{% block content %}
+<div class="container mb-5 pt-5 mt-5">
+    <form id="form" method="post">
+        {% csrf_token %}
+        
+        <table>
+            <tr>
+              <th>Company</th>
+              <th>Contact</th>
+              <th>Country</th>
+            </tr>
+            <tr>
+              <td>Alfreds Futterkiste</td>
+              <td>Maria Anders</td>
+              <td>Germany</td>
+            </tr>
+            <tr>
+              <td>Centro comercial Moctezuma</td>
+              <td>Francisco Chang</td>
+              <td>Mexico</td>
+            </tr>
+        </table>
+
+
+        <input type="date" />
+
+
+
+        {% if user.is_superuser %}
+
+        <select name="drop1" class="m-5" selected="{{f1}}" default:"{{f1}}">
+            {% for i in userlist %} 
+                <option value="{{i}}">{{i}}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="OK">
+
+
+        {% endif %}
+
+
+    </form>
+</div>
+{% endblock %}
