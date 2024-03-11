@@ -5,46 +5,56 @@
 
 {% block content %}
 <div class="container mb-5 pt-5 mt-5">
+  {% if user.is_superuser %}
     <form id="form" method="post">
         {% csrf_token %}
-        
-        <table>
-            <tr>
-              <th>Company</th>
-              <th>Contact</th>
-              <th>Country</th>
-            </tr>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-            </tr>
-            <tr>
-              <td>Centro comercial Moctezuma</td>
-              <td>Francisco Chang</td>
-              <td>Mexico</td>
-            </tr>
-        </table>
-
-
-        <input type="date" />
-
-
-
-        {% if user.is_superuser %}
-
-        <select name="drop1" class="m-5" selected="{{f1}}" default:"{{f1}}">
+        <select name="drop1" class="form-select m-5">
             {% for i in userlist %} 
                 <option value="{{i}}">{{i}}</option>
             {% endfor %}
         </select>
 
-        <input type="submit" value="OK">
+        <input type="submit" value="OK" name="btnform1">
 
+        <table class="table">
+          <tr>
+            <th scope="col">Usuario</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Busqueda</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+          {% for i in userselect %}
+          <tr>
+              <td scope="row">{{i.usuario}}</td>
+              <td>{{i.historial.fecha}}</td>
+              <td>{{i.historial.historial}}</td>
+              <td><button></button></td>
+              <td><button></button></td>
+          </tr>
+          {% endfor %}
+        </table>
+    </form>
+  {% elif user.is_authenticated %} 
+    <form id="form" method="post">
+      {% csrf_token %}
+      <table class="table">
+          <tr>
+            <th scope="col">Usuario</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Busqueda</th>
+          </tr>
+          <tr>
+            <td scope="row">{{user.get_username}}</td>
+            <td>{{user.get_email_field_name}}</td>
+            <td>{{user.get_username}}</td>
+          </tr>
+      </table>
 
-        {% endif %}
-
+      <input type="date" />
 
     </form>
+  {% endif %}
+
 </div>
 {% endblock %}

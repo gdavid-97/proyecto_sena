@@ -24,4 +24,4 @@ recognition.onresult = function (event) {
 let speech = new SpeechSynthesisUtterance();
 speech.lang = "es";
 speech.text = "This is the text to read.";
-//window.speechSynthesis.speak(speech);
+window.speechSynthesis.speak(speech);

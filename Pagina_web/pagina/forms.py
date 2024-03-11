@@ -27,11 +27,19 @@ class forms_sugerencia(forms.ModelForm):
             'mensaje',
         ]
 
-class historial(forms.ModelForm):
+class forms_historial(forms.ModelForm):
 
     class Meta:
         fields = {
             'historial',
             'fecha',
             'usuario'
+        }
+
+class forms_usuario_historial(forms.ModelForm):
+
+    class Meta:
+        fields = {
+            'usuario',
+            'historial'
         }

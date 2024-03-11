@@ -24,9 +24,10 @@ class sugerencia(models.Model):
         return self.nombre_completo
 
 class historial(models.Model):
-    historial= models.CharField(max_length=400)
-    fecha = models.DateField(max_length=20)
+    historial= models.CharField(max_length=500)
+    fecha = models.DateField(auto_now=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.fecha
+    
+class usuario_historial(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    historial = models.ForeignKey(historial, on_delete=models.CASCADE)

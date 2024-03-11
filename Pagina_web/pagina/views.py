@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
-from .forms import forms_compra, forms_sugerencia
+from .forms import forms_compra, forms_sugerencia, forms_historial
 
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.conf import settings
 from django.template import RequestContext
+from .models import usuario_historial
 
 def principal(request):
     context={
@@ -146,29 +147,29 @@ def get_history(request, data):
         User = get_user_model()
         print(data)
 
+
 def crud(request):
     User = get_user_model()
-    if request.method == 'POST':  
-        print(request.POST['drop1'])
+    if request.method == 'POST' and 'btnform1' in request.POST:
         temp = request.POST['drop1']
-
         tempuser = User.objects.get(username=temp)
+        try:
+            tempuser1 = usuario_historial.objects.all()
+            tempuser1 = tempuser1.filter(usuario_id=tempuser.pk)
 
-        tempuser.get_username
-        tempuser.get_email_field_name
-
+            context={
+                'userlist':User.objects.all(),
+                'userselect': tempuser1
+            }
+            response = render(request,"crud.html", context)
+        except Exception as e:
+            print(f'{type(e).__name__}: {e}')
+    else:
         context={
-        'userlist':User.objects.all(),
-        'f1': temp,
-        'user': tempuser
+            'userlist':User.objects.all()
         }
         response = render(request,"crud.html", context)
-        return response
 
-    context={
-        'userlist':User.objects.all()
-    }
-    response = render(request,"crud.html", context)
     return response
 
 def custom_404(request, exception):
