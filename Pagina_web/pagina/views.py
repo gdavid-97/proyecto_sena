@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
-from .forms import forms_compra, forms_sugerencia, forms_historial
+from .forms import  forms_sugerencia, forms_historial
 
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib import messages
@@ -16,24 +16,6 @@ def principal(request):
     }
     response = render(request,"index.html", context)
     return response
-
-def comprar(request):
-    if request.method == 'POST':
-        for name in request.POST:
-            print("{}: {}".format(name,request.POST.getlist(name)))
-        form = forms_compra(request.POST)
-        print(form.is_valid())
-        if form.is_valid():
-            form.save()
-    else:
-        form = forms_compra()
-    
-    context={
-        'api_key': settings.GOOGLE_MAPS_API_KEY,
-        "method": form       
-    }
-
-    return render(request, "Comprar.html", context)
 
 def acerca(request):
     context={
@@ -120,7 +102,7 @@ def cerrar_sesion(request):
     return redirect('home')
 
 
-def check_user(request, username, password):
+def verificar_usuario(request, username, password):
     if request.method == 'GET':
         User = get_user_model()
         if username == "admin":
@@ -131,7 +113,7 @@ def check_user(request, username, password):
         else:
             return HttpResponse("<h1>no existe</h1>")
     
-def add_history(request, data):
+def agregar_historial(request, data):
     if request.method == 'GET':
         User = get_user_model()
         print(data)
@@ -142,7 +124,7 @@ def add_history(request, data):
         print(d.pk)
         return HttpResponse("<p>hola</p>")
 
-def get_history(request, data):
+def tomar_historial(request, data):
     if request.method == 'GET':
         User = get_user_model()
         print(data)
@@ -150,7 +132,12 @@ def get_history(request, data):
 
 def crud(request):
     User = get_user_model()
-    if request.method == 'POST' and 'btnform1' in request.POST:
+    
+    s = request.POST
+    f=s.getlist("btneditar")
+    print(f)
+        
+    if request.method == 'POST':
         temp = request.POST['drop1']
         tempuser = User.objects.get(username=temp)
         try:

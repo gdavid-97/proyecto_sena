@@ -1,19 +1,5 @@
 from django import forms
-from .models import comprar, sugerencia
-
-class forms_compra(forms.ModelForm):
-    
-    class Meta:
-        model = comprar
-        fields = [
-            'nombre_completo',
-            'correo_electronico',
-            'telefono',
-            'direccion',
-            'numero_de_tarjeta',
-            'fecha_de_expedicion',
-            'ccv',
-        ]
+from .models import  sugerencia, historial
 
 class forms_sugerencia(forms.ModelForm):
     
@@ -30,6 +16,7 @@ class forms_sugerencia(forms.ModelForm):
 class forms_historial(forms.ModelForm):
 
     class Meta:
+        model=historial
         fields = {
             'historial',
             'fecha',

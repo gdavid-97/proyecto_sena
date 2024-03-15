@@ -99,7 +99,7 @@ def greet_user():
     speak(f"Yo soy {BOTNAME}. ¿Cómo puedo asistirle?")
 
 
-def take_user_input():
+def escuchar():
     """Toma las entradas del usuario, las reconoce utilizando el módulo de reconocimiento de voz y lo transforma a texto"""
 
     r = sr.Recognizer()
@@ -148,7 +148,7 @@ if __name__ == '__main__':
             
     while ciclo:
         
-        #query = take_user_input().lower()
+        #query = escuchar().lower()
         
         query = input("--->").lower()
 

@@ -29,29 +29,13 @@
               <td scope="row">{{i.usuario}}</td>
               <td>{{i.historial.fecha}}</td>
               <td>{{i.historial.historial}}</td>
-              <td><button></button></td>
-              <td><button></button></td>
+              <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}">{{i.id}}</button></td>
+              <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}">{{i.id}}</button></td>
           </tr>
           {% endfor %}
         </table>
-    </form>
-  {% elif user.is_authenticated %} 
-    <form id="form" method="post">
-      {% csrf_token %}
-      <table class="table">
-          <tr>
-            <th scope="col">Usuario</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Busqueda</th>
-          </tr>
-          <tr>
-            <td scope="row">{{user.get_username}}</td>
-            <td>{{user.get_email_field_name}}</td>
-            <td>{{user.get_username}}</td>
-          </tr>
-      </table>
 
-      <input type="date" />
+      
 
     </form>
   {% endif %}

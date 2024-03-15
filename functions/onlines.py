@@ -29,7 +29,7 @@ def search_on_google(query):
     kit.search(query)
 
 
-def send_email(receiver_address, subject, message):
+def enviar_email(receiver_address, subject, message):
     try:
         email = EmailMessage()
         email['To'] = receiver_address
