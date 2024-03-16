@@ -10,8 +10,8 @@ import concurrent.futures
 import sys
 import urllib.request
 
-USERNAME = config('USER')
-BOTNAME = config('BOTNAME')
+USUARIO = config('USER')
+NOMBRE_APP = config('BOTNAME')
 
 login = True
 ciclo = False
@@ -31,7 +31,7 @@ row= data_db.fetchall()
 print(row[1][1])
 """
 
-def check(username, password):
+def verificar(username, password):
     try:
         contents = urllib.request.urlopen(f"http://127.0.0.1:8000/check/{username}/{password}").read()
 
@@ -91,12 +91,12 @@ def greet_user():
     
     hour = datetime.now().hour
     if (hour >= 0) and (hour < 12):
-        speak(f"Buenos días {USERNAME}")
+        speak(f"Buenos días {USUARIO}")
     elif (hour >= 12) and (hour < 16):
-        speak(f"Buenas tardes {USERNAME}")
+        speak(f"Buenas tardes {USUARIO}")
     elif (hour >= 16) and (hour < 24):
-        speak(f"Buenas noches {USERNAME}")
-    speak(f"Yo soy {BOTNAME}. ¿Cómo puedo asistirle?")
+        speak(f"Buenas noches {USUARIO}")
+    speak(f"Yo soy {NOMBRE_APP}. ¿Cómo puedo asistirle?")
 
 
 def escuchar():
@@ -135,7 +135,7 @@ if __name__ == '__main__':
         usename=input("usuario-->")
         password=input("contraseña-->")
 
-        f = check(username=usename, password=password)
+        f = verificar(username=usename, password=password)
 
         if f:
             print("acceso concedido")
@@ -161,7 +161,7 @@ if __name__ == '__main__':
             query = query[1]
 
             if ' ip ' in query:
-                ip_address = onlines.find_my_ip()
+                ip_address = onlines.buscar_ip()
                 parallel(f'Su Dirección IP es {ip_address}')
                 print(f'Tu direccion IP es {ip_address}')
             
@@ -170,7 +170,7 @@ if __name__ == '__main__':
                 number = input("Ingrese el número: ")
                 speak("¿Cúal es el mensaje?")
                 message = input("-->")
-                onlines.send_whatsapp_message(number, message)
+                onlines.enviar_whatsapp(number, message)
                 speak("El mensaje ha sido enviado")
 
             elif ' wikipedia ' in query:
@@ -178,17 +178,17 @@ if __name__ == '__main__':
                 query = query.split("wikipedia")
                 query = query[1]
 
-                temp = onlines.search_on_wikipedia(query)
+                temp = onlines.buscar_wikipedia(query)
                 parallel(temp)
                 print()
 
             elif ' youtube 'in query:
                 query = query.split("youtube")
                 query = query[1]
-                onlines.play_on_youtube(query)
+                onlines.youtube(query)
 
             elif ' noticias 'in query:
-                temp = onlines.get_latest_news()
+                temp = onlines.noticias()
                 print(temp)
                 speak(temp)
 

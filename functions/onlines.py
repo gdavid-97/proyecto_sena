@@ -7,25 +7,25 @@ from decouple import config
 import google.generativeai as genai
 
 EMAIL = config("EMAIL")
-PASSWORD = config("PASSWORD")
+CONTRASEÑA = config("PASSWORD")
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
 
-def search_on_wikipedia(query):
+def buscar_wikipedia(query):
     wikipedia.set_lang('es')
     results = wikipedia.summary(query, sentences=1)
     return results
 
-def find_my_ip():
+def buscar_ip():
     ip_address = requests.get('https://api64.ipify.org?format=json').json()
     return ip_address["ip"]
 
-def play_on_youtube(video):
+def youtube(video):
     kit.playonyt(video)
 
-def send_whatsapp_message(number, message):
+def enviar_whatsapp(number, message):
     kit.sendwhatmsg_instantly(f"+57{number}", message)
 
-def search_on_google(query):
+def google(query):
     kit.search(query)
 
 
@@ -38,7 +38,7 @@ def enviar_email(receiver_address, subject, message):
         email.set_content(message)
         s = smtplib.SMTP("smtp.gmail.com", 587)
         s.starttls()
-        s.login(EMAIL, PASSWORD)
+        s.login(EMAIL, CONTRASEÑA)
         s.send_message(email)
         s.close()
         return True
@@ -49,7 +49,7 @@ def enviar_email(receiver_address, subject, message):
 
 NEWS_API_KEY = config("NEWS_API_KEY")
 
-def get_latest_news():
+def noticias():
     news_headlines = []
     res = requests.get(
         f"https://newsapi.org/v2/top-headlines?country=co&apiKey={NEWS_API_KEY}&category=general").json()
