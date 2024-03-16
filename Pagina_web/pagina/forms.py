@@ -1,5 +1,5 @@
 from django import forms
-from .models import  sugerencia, historial
+from .models import  sugerencia, historial, usuario_historial
 
 class forms_sugerencia(forms.ModelForm):
     
@@ -26,6 +26,7 @@ class forms_historial(forms.ModelForm):
 class forms_usuario_historial(forms.ModelForm):
 
     class Meta:
+        model = usuario_historial
         fields = {
             'usuario',
             'historial'

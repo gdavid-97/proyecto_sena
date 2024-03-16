@@ -31,9 +31,9 @@ row= data_db.fetchall()
 print(row[1][1])
 """
 
-def verificar(username, password):
+def verificar(nombre_usuario, password):
     try:
-        contents = urllib.request.urlopen(f"http://127.0.0.1:8000/check/{username}/{password}").read()
+        contents = urllib.request.urlopen(f"http://127.0.0.1:8000/check/{nombre_usuario}/{password}").read()
 
         temp = str(contents)
 
@@ -47,9 +47,13 @@ def verificar(username, password):
     except Exception as e:
         print(f'{type(e).__name__}: {e}')
 
+def historial():
+
+    
+
 
 # Conversión Texto a Voz
-def speak(text):
+def hablar(texto):
     engine = pyttsx3.init('sapi5')
 
     # Set Rate
@@ -66,19 +70,19 @@ def speak(text):
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
     
-    engine.say(text)
+    engine.say(texto)
     engine.runAndWait()
     del engine
 
-def typing(text):
-    for char in text:
+def escribir(texto):
+    for char in texto:
         sleep(0.05)
         sys.stdout.write(char)
         sys.stdout.flush()
 
-def parallel(text):
+def paralelo(texto):
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-        future_tasks = {executor.submit(speak, text), executor.submit(typing, text)}
+        future_tasks = {executor.submit(hablar, texto), executor.submit(escribir, texto)}
         for future in concurrent.futures.as_completed(future_tasks):
             try:
                 data = future.result()
@@ -86,17 +90,17 @@ def parallel(text):
                 print(f'{type(e).__name__}: {e}')
 
 
-def greet_user():
+def saludar():
     """Saluda al usuario de acuerdo al horario"""
     
     hour = datetime.now().hour
     if (hour >= 0) and (hour < 12):
-        speak(f"Buenos días {USUARIO}")
+        hablar(f"Buenos días {USUARIO}")
     elif (hour >= 12) and (hour < 16):
-        speak(f"Buenas tardes {USUARIO}")
+        hablar(f"Buenas tardes {USUARIO}")
     elif (hour >= 16) and (hour < 24):
-        speak(f"Buenas noches {USUARIO}")
-    speak(f"Yo soy {NOMBRE_APP}. ¿Cómo puedo asistirle?")
+        hablar(f"Buenas noches {USUARIO}")
+    hablar(f"Yo soy {NOMBRE_APP}. ¿Cómo puedo asistirle?")
 
 
 def escuchar():
@@ -117,12 +121,12 @@ def escuchar():
         else:
             hour = datetime.now().hour
             if hour >= 21 and hour < 6:
-                speak("Buenas noches")
+                hablar("Buenas noches")
             else:
-                speak('¡Tenga un buen día!')
+                hablar('¡Tenga un buen día!')
             return "exit"
     except Exception:
-        speak('Disculpe, no he podido entender. ¿Podría decirlo de nuevo?')
+        hablar('Disculpe, no he podido entender. ¿Podría decirlo de nuevo?')
         query = 'None'
     return query
 
@@ -132,10 +136,10 @@ if __name__ == '__main__':
     
     while login:
 
-        usename=input("usuario-->")
-        password=input("contraseña-->")
+        usuario=input("usuario-->")
+        clave=input("contraseña-->")
 
-        f = verificar(username=usename, password=password)
+        f = verificar(nombre_usuario=usuario, password=clave)
 
         if f:
             print("acceso concedido")
@@ -144,7 +148,7 @@ if __name__ == '__main__':
         else:
             print("acceso denegado")
 
-    greet_user()
+    saludar()
             
     while ciclo:
         
@@ -161,17 +165,17 @@ if __name__ == '__main__':
             query = query[1]
 
             if ' ip ' in query:
-                ip_address = onlines.buscar_ip()
-                parallel(f'Su Dirección IP es {ip_address}')
-                print(f'Tu direccion IP es {ip_address}')
+                direccion_ip = onlines.buscar_ip()
+                paralelo(f'Su Dirección IP es {direccion_ip}')
+                print(f'Tu direccion IP es {direccion_ip}')
             
             elif ' whatsapp ' in query:
-                speak('¿A qué número debería enviar el mensaje?, por favor, digítelo en la consola: ')
+                hablar('¿A qué número debería enviar el mensaje?, por favor, digítelo en la consola: ')
                 number = input("Ingrese el número: ")
-                speak("¿Cúal es el mensaje?")
+                hablar("¿Cúal es el mensaje?")
                 message = input("-->")
                 onlines.enviar_whatsapp(number, message)
-                speak("El mensaje ha sido enviado")
+                hablar("El mensaje ha sido enviado")
 
             elif ' wikipedia ' in query:
 
@@ -179,7 +183,7 @@ if __name__ == '__main__':
                 query = query[1]
 
                 temp = onlines.buscar_wikipedia(query)
-                parallel(temp)
+                paralelo(temp)
                 print()
 
             elif ' youtube 'in query:
@@ -190,7 +194,7 @@ if __name__ == '__main__':
             elif ' noticias 'in query:
                 temp = onlines.noticias()
                 print(temp)
-                speak(temp)
+                hablar(temp)
 
             else:
                 print("Procesando...")
@@ -201,9 +205,9 @@ if __name__ == '__main__':
                     if stream: 
                         for chunk in temp:
                             print(chunk.text)
-                            speak(chunk.text)
+                            hablar(chunk.text)
                     else:
-                        parallel(temp)
+                        paralelo(temp)
                         print()
                         
                 except Exception as e:

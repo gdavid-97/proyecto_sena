@@ -10,6 +10,8 @@ from django.conf import settings
 from django.template import RequestContext
 from .models import usuario_historial
 
+api_key_maps = settings.GOOGLE_MAPS_API_KEY
+
 def principal(request):
     context={
         
@@ -19,7 +21,7 @@ def principal(request):
 
 def acerca(request):
     context={
-        'api_key': settings.GOOGLE_MAPS_API_KEY        
+        'api_key': api_key_maps      
     }
     response = render(request,"Contactos.html", context)
     return response
@@ -102,32 +104,32 @@ def cerrar_sesion(request):
     return redirect('home')
 
 
-def verificar_usuario(request, username, password):
+def verificar_usuario(request, nombre_usuario, clave):
     if request.method == 'GET':
         User = get_user_model()
-        if username == "admin":
+        if nombre_usuario == "admin":
             return HttpResponse("<h1>no existe</h1>")
-        d = User.objects.get(username=username)
-        if d.check_password(password):
+        d = User.objects.get(username=nombre_usuario)
+        if d.check_password(clave):
             return HttpResponse("<h1>existe</h1>")
         else:
             return HttpResponse("<h1>no existe</h1>")
     
-def agregar_historial(request, data):
+def agregar_historial(request, informacion):
     if request.method == 'GET':
         User = get_user_model()
-        print(data)
+        print(informacion)
         print(request.GET.urlencode())
-        temp = data
+        temp = informacion
         temp = temp.split("%")
         d = User.objects.get(username=temp[1])
         print(d.pk)
         return HttpResponse("<p>hola</p>")
 
-def tomar_historial(request, data):
+def tomar_historial(request, informacion):
     if request.method == 'GET':
         User = get_user_model()
-        print(data)
+        print(informacion)
 
 
 def crud(request):

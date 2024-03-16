@@ -9,33 +9,34 @@ import google.generativeai as genai
 EMAIL = config("EMAIL")
 CONTRASEÑA = config("PASSWORD")
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+NEWS_API_KEY = config("NEWS_API_KEY")
 
 def buscar_wikipedia(query):
     wikipedia.set_lang('es')
-    results = wikipedia.summary(query, sentences=1)
-    return results
+    resultados = wikipedia.summary(query, sentences=1)
+    return resultados
 
 def buscar_ip():
-    ip_address = requests.get('https://api64.ipify.org?format=json').json()
-    return ip_address["ip"]
+    direccion_ip = requests.get('https://api64.ipify.org?format=json').json()
+    return direccion_ip["ip"]
 
 def youtube(video):
     kit.playonyt(video)
 
-def enviar_whatsapp(number, message):
-    kit.sendwhatmsg_instantly(f"+57{number}", message)
+def enviar_whatsapp(numero, mensaje):
+    kit.sendwhatmsg_instantly(f"+57{numero}", mensaje)
 
 def google(query):
     kit.search(query)
 
 
-def enviar_email(receiver_address, subject, message):
+def enviar_email(destinatario, asunto, mensaje):
     try:
         email = EmailMessage()
-        email['To'] = receiver_address
-        email["Subject"] = subject
+        email['To'] = destinatario
+        email["Subject"] = asunto
         email['From'] = EMAIL
-        email.set_content(message)
+        email.set_content(mensaje)
         s = smtplib.SMTP("smtp.gmail.com", 587)
         s.starttls()
         s.login(EMAIL, CONTRASEÑA)
@@ -47,8 +48,6 @@ def enviar_email(receiver_address, subject, message):
         return False
     
 
-NEWS_API_KEY = config("NEWS_API_KEY")
-
 def noticias():
     news_headlines = []
     res = requests.get(
@@ -59,10 +58,9 @@ def noticias():
     return news_headlines[:5]
 
 
-genai.configure(api_key= GOOGLE_API_KEY)
-
 
 def ai(query, stream = False):
+    genai.configure(api_key= GOOGLE_API_KEY)
     model = genai.GenerativeModel(model_name = 'gemini-pro')
     prompt = query
     response = model.generate_content(

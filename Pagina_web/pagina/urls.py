@@ -9,6 +9,6 @@ urlpatterns = [
     path('sugerencias', views.sugerencia, name="sugerencias"),
     path('logout', views.cerrar_sesion, name="logout"),
     path('check/<str:username>/<int:password>', views.verificar_usuario, name="check"),
-    path('historial/<str:data>', views.add_history, name="add_historial"),
+    path('historial/<str:data>', views.agregar_historial, name="add_historial"),
     path('crud/', views.crud, name="crud")
 ]
