@@ -63,14 +63,41 @@ def ai(query, stream = False):
     genai.configure(api_key= GOOGLE_API_KEY)
     model = genai.GenerativeModel(model_name = 'gemini-pro')
     prompt = query
+    safety_settings = [
+    {
+        "category": "HARM_CATEGORY_DANGEROUS",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_NONE",
+    },
+    ]
     response = model.generate_content(
         contents=prompt,
-        stream=stream)
+        stream=stream, 
+        safety_settings=safety_settings
+        )
+    
     try:
         if stream:      
             return response  #stream=True en generate_content
         else:
-            return response.text 
+            for candidate in response.candidates:
+                return [part.text for part in candidate.content.parts]
+            #return response.text 
     except Exception as e:
         print(f'{type(e).__name__}: {e}')
     

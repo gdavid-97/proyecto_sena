@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
-from .forms import  forms_sugerencia, forms_historial
+from .forms import  forms_sugerencia
 
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.conf import settings
 from django.template import RequestContext
-from .models import usuario_historial
+from .models import usuario_historial, historial
+
+import datetime
+
 
 api_key_maps = settings.GOOGLE_MAPS_API_KEY
 
@@ -115,16 +118,20 @@ def verificar_usuario(request, nombre_usuario, clave):
         else:
             return HttpResponse("<h1>no existe</h1>")
     
-def agregar_historial(request, informacion):
+def agregar_historial(request, nombre_usuario, clave, informacion):
     if request.method == 'GET':
-        User = get_user_model()
+        informacion = informacion.replace("%20"," ")
         print(informacion)
-        print(request.GET.urlencode())
-        temp = informacion
-        temp = temp.split("%")
-        d = User.objects.get(username=temp[1])
-        print(d.pk)
-        return HttpResponse("<p>hola</p>")
+        User = get_user_model()
+        tempuser = User.objects.get(username=nombre_usuario)
+        if tempuser.check_password(clave):
+            temph = historial(busqueda = informacion, usuario = tempuser)
+            temph.save()
+            tempuh= usuario_historial(historial_id=temph.pk,usuario_id=tempuser.pk)
+            tempuh.save()
+            print(temph)
+            
+            
 
 def tomar_historial(request, informacion):
     if request.method == 'GET':

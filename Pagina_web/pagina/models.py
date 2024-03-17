@@ -12,8 +12,8 @@ class sugerencia(models.Model):
         return self.nombre_completo
 
 class historial(models.Model):
-    historial= models.CharField(max_length=500)
-    fecha = models.DateField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    busqueda = models.CharField(max_length=255, null=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     
 class usuario_historial(models.Model):

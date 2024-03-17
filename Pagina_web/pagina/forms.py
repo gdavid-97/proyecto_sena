@@ -18,8 +18,7 @@ class forms_historial(forms.ModelForm):
     class Meta:
         model=historial
         fields = {
-            'historial',
-            'fecha',
+            'busqueda',
             'usuario'
         }
 

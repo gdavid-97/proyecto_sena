@@ -2,55 +2,19 @@ import pyttsx3
 from decouple import config
 from datetime import datetime
 import speech_recognition as sr
-from random import choice
-from utils import opening_text
-from functions import onlines
+
 from time import sleep
 import concurrent.futures 
 import sys
-import urllib.request
+
+import conexion
+from functions import onlines
 
 USUARIO = config('USER')
 NOMBRE_APP = config('BOTNAME')
 
 login = True
 ciclo = False
-
-"""
-import sqlite3
-import os
-#Conexion con la base de datos
-ruta_base_datos = os.path.abspath("E:\\Programacion\\Proyectos\\Sena\\github\\django-sena-VoxNova\\db.sqlite3")
-
-conn = sqlite3.connect(ruta_base_datos)
-
-data_db = conn.cursor()
-sql = "select * from auth_user"
-data_db.execute(sql)
-row= data_db.fetchall()
-print(row[1][1])
-"""
-
-def verificar(nombre_usuario, password):
-    try:
-        contents = urllib.request.urlopen(f"http://127.0.0.1:8000/check/{nombre_usuario}/{password}").read()
-
-        temp = str(contents)
-
-        print(temp)
-
-        if 'no' in temp:
-            return False
-        else:
-            return True
-        
-    except Exception as e:
-        print(f'{type(e).__name__}: {e}')
-
-def historial():
-
-    
-
 
 # Conversión Texto a Voz
 def hablar(texto):
@@ -76,7 +40,7 @@ def hablar(texto):
 
 def escribir(texto):
     for char in texto:
-        sleep(0.05)
+        sleep(0.06)
         sys.stdout.write(char)
         sys.stdout.flush()
 
@@ -133,13 +97,16 @@ def escuchar():
 
 
 if __name__ == '__main__':
+
+    usuario=""
+    clave=0
     
     while login:
 
         usuario=input("usuario-->")
         clave=input("contraseña-->")
 
-        f = verificar(nombre_usuario=usuario, password=clave)
+        f = conexion.verificar(nombre_usuario=usuario, clave=clave)
 
         if f:
             print("acceso concedido")
@@ -163,6 +130,8 @@ if __name__ == '__main__':
         if 'voxnova' in query: 
             query = query.split("voxnova")
             query = query[1]
+
+            conexion.enviar_historial(usuario, clave, str(query))
 
             if ' ip ' in query:
                 direccion_ip = onlines.buscar_ip()
@@ -207,7 +176,8 @@ if __name__ == '__main__':
                             print(chunk.text)
                             hablar(chunk.text)
                     else:
-                        paralelo(temp)
+                        print(len(temp))
+                        paralelo(temp[0])
                         print()
                         
                 except Exception as e:
