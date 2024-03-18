@@ -10,6 +10,8 @@ import sys
 import conexion
 from functions import onlines
 
+from grafic.inicio import App
+
 USUARIO = config('USER')
 NOMBRE_APP = config('BOTNAME')
 
@@ -94,10 +96,7 @@ def escuchar():
         query = 'None'
     return query
 
-
-
-if __name__ == '__main__':
-
+def sin_grafico():
     usuario=""
     clave=0
     
@@ -176,10 +175,14 @@ if __name__ == '__main__':
                             print(chunk.text)
                             hablar(chunk.text)
                     else:
-                        print(len(temp))
                         paralelo(temp[0])
                         print()
                         
                 except Exception as e:
                     print(f'{type(e).__name__}: {e}')
             
+
+
+if __name__ == '__main__':
+
+    App()
