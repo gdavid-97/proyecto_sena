@@ -5,6 +5,10 @@ import util.generico as util
 import conexion
 from grafic.principal import MasterPanel
 
+BG_COLOR = '#3a7ff6'
+BG_COLOR_BLANCO = '#fcfcfc'
+BG_COLOR_FONT = '#666a88'
+
 class App:
 
     def verificar(self):
@@ -26,42 +30,42 @@ class App:
 
         logo = util.leer_imagen(path="img/icono-s.png",size=(200,200))
 
-        #Frame Imagen parte izquierda
-        frame_logo = tk.Frame(self.ventana, bd=0, width=300, relief=tk.SOLID, padx=10, pady=10, bg="#3a7ff6")
-        frame_logo.pack(side="left", expand=tk.NO, fill=tk.BOTH)
-        label = tk.Label( frame_logo, image=logo, bg='#3a7ff6')
+        #Imagen parte izquierda
+        marco_logo = tk.Frame(self.ventana, bd=0, width=300, relief=tk.SOLID, padx=10, pady=10, bg=BG_COLOR)
+        marco_logo.pack(side="left", expand=tk.NO, fill=tk.BOTH)
+        label = tk.Label( marco_logo, image=logo, bg='#3a7ff6')
         label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        #Frame parte derecha
-        frame_form = tk.Frame(self.ventana, bd=0, relief=tk.SOLID, bg='#fcfcfc')
-        frame_form.pack(side='right', expand=tk.YES, fill=tk.BOTH)
+        #parte derecha
+        marco_formulario = tk.Frame(self.ventana, bd=0, relief=tk.SOLID, bg=BG_COLOR_BLANCO)
+        marco_formulario.pack(side='right', expand=tk.YES, fill=tk.BOTH)
 
-        #Frame Titulo
-        frame_form_top = tk.Frame (frame_form, height= 50, bd=0, relief=tk.SOLID, bg = 'black')
-        frame_form_top.pack(side='top', fill=tk.X)
-        titulo = tk.Label(frame_form_top, text="Inicio de sesion", font=('Times', 30), fg='#666a88', bg='#fcfcfc', pady=50)
+        #Titulo
+        marco_formulario_arriba = tk.Frame (marco_formulario, height= 50, bd=0, relief=tk.SOLID, bg = 'black')
+        marco_formulario_arriba.pack(side='top', fill=tk.X)
+        titulo = tk.Label(marco_formulario_arriba, text="Inicio de sesion", font=('Times', 30), fg=BG_COLOR_FONT, bg=BG_COLOR_BLANCO, pady=50)
         titulo.pack(expand=tk.YES, fill=tk.BOTH)
 
-        #Frame Parte drecha abajo
-        frame_form_fill = tk.Frame(frame_form, height=50, bd=0, relief=tk.SOLID, bg='#fcfcfc')
-        frame_form_fill.pack(side='bottom', expand=tk.YES, fill=tk.BOTH)
+        #Parte drecha abajo
+        marco_dormulario_abajo = tk.Frame(marco_formulario, height=50, bd=0, relief=tk.SOLID, bg=BG_COLOR_BLANCO)
+        marco_dormulario_abajo.pack(side='bottom', expand=tk.YES, fill=tk.BOTH)
 
-        #Frame usuario
-        etiqueta_usuario = tk.Label(frame_form_fill, text='Usuario', font=('Times',14), fg='#666a88', bg='#fcfcfc', anchor='w')
-        etiqueta_usuario.pack(fill=tk.X, padx=20, pady=10)
-        self.usuario = ttk.Entry(frame_form_fill, font=('Times', 14))
-        self.usuario.pack(fill=tk.X, padx=20, pady=10)
+        #Usuario
+        etiqueta_usuario = tk.Label(marco_dormulario_abajo, text='Usuario', font=('Times',14), fg=BG_COLOR_FONT, bg=BG_COLOR_BLANCO, anchor='w')
+        etiqueta_usuario.pack(fill=tk.X, padx=100, pady=10)
+        self.usuario = ttk.Entry(marco_dormulario_abajo, font=('Times', 14))
+        self.usuario.pack(fill=tk.X, padx=100, pady=10)
 
-        #Frame clave
-        etiqueta_clave = tk.Label(frame_form_fill, text='contraseña', font=('Times',14), fg='#666a88', bg='#fcfcfc', anchor='w')
-        etiqueta_clave.pack(fill=tk.X, padx=20, pady=5)
-        self.clave = ttk.Entry(frame_form_fill, font=('Times', 14))
-        self.clave.pack(fill=tk.X, padx=20, pady=10)
+        #Clave
+        etiqueta_clave = tk.Label(marco_dormulario_abajo, text='contraseña', font=('Times',14), fg=BG_COLOR_FONT, bg=BG_COLOR_BLANCO, anchor='w')
+        etiqueta_clave.pack(fill=tk.X, padx=100, pady=5)
+        self.clave = ttk.Entry(marco_dormulario_abajo, font=('Times', 14))
+        self.clave.pack(fill=tk.X, padx=100, pady=10)
         self.clave.config(show='*')
 
-        #Frame boton
-        inicio = tk.Button(frame_form_fill, text="Iniciar sesion", font=('Times', 15, BOLD), bg='#3a7ff6',bd=0, fg='#fff', command=self.verificar)
-        inicio.pack(fill=tk.X, padx=20, pady=20)
+        #Boton
+        inicio = tk.Button(marco_dormulario_abajo, text="Iniciar sesion", font=('Times', 15, BOLD), bg=BG_COLOR,bd=0, fg='#fff', command=self.verificar)
+        inicio.pack(fill=tk.X, padx=100, pady=20)
         inicio.bind('<Return>', (lambda event: self.verificar()))
 
 
