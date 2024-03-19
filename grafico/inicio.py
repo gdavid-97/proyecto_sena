@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 from tkinter.font import BOLD
 import util.generico as util
 import conexion
-from grafic.principal import MasterPanel
+from grafico.principal import MasterPanel
 
 BG_COLOR = '#3a7ff6'
 BG_COLOR_BLANCO = '#fcfcfc'
@@ -18,7 +18,7 @@ class App:
             self.ventana.destroy()
             MasterPanel()
         else:
-            messagebox.showerror(message="La contraseña no es correcta", title="Mensaje") 
+            messagebox.showerror(message="La contraseña o usuario no es correcto", title="Mensaje") 
 
     def __init__(self):
         self.ventana = tk.Tk()

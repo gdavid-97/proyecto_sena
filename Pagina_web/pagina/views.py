@@ -110,10 +110,9 @@ def cerrar_sesion(request):
 def verificar_usuario(request, nombre_usuario, clave):
     if request.method == 'GET':
         User = get_user_model()
-        if nombre_usuario == "admin":
-            return HttpResponse("<h1>no existe</h1>")
         d = User.objects.get(username=nombre_usuario)
-        if d.check_password(clave):
+        clave = int(clave)
+        if d.check_password(clave) == True:
             return HttpResponse("<h1>existe</h1>")
         else:
             return HttpResponse("<h1>no existe</h1>")
@@ -121,7 +120,6 @@ def verificar_usuario(request, nombre_usuario, clave):
 def agregar_historial(request, nombre_usuario, clave, informacion):
     if request.method == 'GET':
         informacion = informacion.replace("%20"," ")
-        print(informacion)
         User = get_user_model()
         tempuser = User.objects.get(username=nombre_usuario)
         if tempuser.check_password(clave):

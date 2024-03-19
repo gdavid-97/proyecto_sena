@@ -59,7 +59,7 @@ def noticias():
 
 
 
-def ai(query, stream = False):
+def ai(query):
     genai.configure(api_key= GOOGLE_API_KEY)
     model = genai.GenerativeModel(model_name = 'gemini-pro')
     prompt = query
@@ -86,18 +86,14 @@ def ai(query, stream = False):
     },
     ]
     response = model.generate_content(
-        contents=prompt,
-        stream=stream, 
+        contents=prompt, 
         safety_settings=safety_settings
         )
     
     try:
-        if stream:      
-            return response  #stream=True en generate_content
-        else:
-            for candidate in response.candidates:
-                return [part.text for part in candidate.content.parts]
-            #return response.text 
+        for candidate in response.candidates:
+            return [part.text for part in candidate.content.parts]
+        #return response.text 
     except Exception as e:
         print(f'{type(e).__name__}: {e}')
     
