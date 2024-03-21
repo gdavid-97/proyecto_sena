@@ -127,7 +127,6 @@ def agregar_historial(request, nombre_usuario, clave, informacion):
             temph.save()
             tempuh= usuario_historial(historial_id=temph.pk,usuario_id=tempuser.pk)
             tempuh.save()
-            print(temph)
             
             
 
@@ -139,12 +138,18 @@ def tomar_historial(request, informacion):
 
 def crud(request):
     User = get_user_model()
-    
-    s = request.POST
-    f=s.getlist("btneditar")
-    print(f)
         
     if request.method == 'POST':
+        s = request.POST
+    
+        f=s.getlist("btneditar")
+        f=s.getlist("btneliminar")
+        m=len(f)
+        if m != 0:
+            crud_eliminar(f[0])
+        m=s.getlist(f"textarea")
+
+
         temp = request.POST['drop1']
         tempuser = User.objects.get(username=temp)
         try:
@@ -165,6 +170,17 @@ def crud(request):
         response = render(request,"crud.html", context)
 
     return response
+
+def crud_eliminar(id):
+    tempuser1 = usuario_historial.objects.all()
+    tempuser1 = tempuser1.get(id=id)
+    temp = tempuser1.historial.pk
+    tempuser1.delete()
+
+    tempuser2 = historial.objects.all()
+    tempuser2 = tempuser2.get(id=temp)
+    tempuser2.delete()
+    return True
 
 def custom_404(request, exception):
     return render(request, '404.html', status=404)

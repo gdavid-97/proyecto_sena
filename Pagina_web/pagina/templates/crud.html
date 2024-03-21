@@ -28,14 +28,26 @@
           <tr>
               <td scope="row">{{i.usuario}}</td>
               <td>{{i.historial.fecha}}</td>
-              <td>{{i.historial.busqueda}}</td>
-              <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}">Editar</button></td>
-              <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}">Eliminar</button></td>
+              <td><textarea name = "textarea{{i.id}}">{{i.historial.busqueda}}</textarea></td>
+              <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}" action="crud/eliminar/" type="submit">Editar</button></td>
+              <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}" action="crud/eliminar/" type="submit">Eliminar</button></td>
           </tr>
           {% endfor %}
         </table>
 
         <div class="col">
+
+          <table table class="table"> 
+            <tr>
+              <th scope="col">Usuario</th>
+            </tr>
+            {% for i in userlist %} 
+            <tr>
+              <td>{{i}}</td>
+            </tr>
+            {% endfor %}
+            
+          </table>
 
         </div>
       

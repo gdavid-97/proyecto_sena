@@ -53,7 +53,7 @@
               >Acerca de</a
             >
           </li>
-          {%if user.is_authenticated %}
+          {%if user.is_superuser %}
           <li class="nav-item px-2">
             <a href="{% url 'crud' %}" class="nav-link {% if request.path == '/crud' %} active {% else %} text-info {% endif %}"
               >Administracion</a
