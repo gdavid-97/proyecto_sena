@@ -12,6 +12,16 @@ from .models import usuario_historial, historial
 
 import datetime
 
+from reportlab.pdfgen import canvas 
+from reportlab.pdfbase.ttfonts import TTFont 
+from reportlab.pdfbase import pdfmetrics 
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import landscape, letter
+
+from reportlab.platypus.tables import Table
+
+from reportlab.lib.units import inch, mm
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
 api_key_maps = settings.GOOGLE_MAPS_API_KEY
 
@@ -127,6 +137,9 @@ def agregar_historial(request, nombre_usuario, clave, informacion):
             temph.save()
             tempuh= usuario_historial(historial_id=temph.pk,usuario_id=tempuser.pk)
             tempuh.save()
+
+            return HttpResponse("<h1>si</h1>")
+    
             
             
 
@@ -140,24 +153,46 @@ def crud(request):
     User = get_user_model()
         
     if request.method == 'POST':
-        s = request.POST
-    
-        f=s.getlist("btneditar")
-        f=s.getlist("btneliminar")
-        m=len(f)
-        if m != 0:
-            crud_eliminar(f[0])
-        m=s.getlist(f"textarea")
-
-
-        temp = request.POST['drop1']
-        tempuser = User.objects.get(username=temp)
         try:
+            s = request.POST
+            temp = request.POST['drop1']
+            tempuser = User.objects.get(username=temp)
+
             tempuser1 = usuario_historial.objects.all()
             tempuser1 = tempuser1.filter(usuario_id=tempuser.pk)
 
+            f = s.getlist("btneliminarusuario")
+            m = len(f)
+            if m != 0:
+                temporal = user_eliminar(f[0])
+                if temporal == True:
+                    messages.success(request, 'Usuario eliminado')
+
+            f = s.getlist("btneditar")
+            m = len(f)
+            if m != 0:
+                t = s.getlist(f"textarea")
+                temporal= crud_editar(f[0], t[m])
+                if temporal == True:
+                    messages.success(request, 'Busqueda editada')
+
+            f = s.getlist("btneliminar")
+            m = len(f)
+            if m != 0:
+                temporal=crud_eliminar(f[0])
+                if temporal == True:
+                    messages.success(request, 'Busqueda eliminada')
+
+            f=s.getlist("btnimprimir1")
+            m = len(f)
+            if m != 0:
+                temporal = crud_imprimir(tempuser1)
+                if temporal == True:
+                    messages.success(request, 'Informe realizado')
+
+
             context={
-                'userlist':User.objects.all(),
+                'userlist':User.objects.all().exclude(id=1),
                 'userselect': tempuser1
             }
             response = render(request,"crud.html", context)
@@ -165,7 +200,7 @@ def crud(request):
             print(f'{type(e).__name__}: {e}')
     else:
         context={
-            'userlist':User.objects.all()
+            'userlist':User.objects.all().exclude(id=1)
         }
         response = render(request,"crud.html", context)
 
@@ -180,6 +215,98 @@ def crud_eliminar(id):
     tempuser2 = historial.objects.all()
     tempuser2 = tempuser2.get(id=temp)
     tempuser2.delete()
+    return True
+
+def user_eliminar(id):
+
+    User = get_user_model()
+
+    tempuser1 = usuario_historial.objects.all()
+    tempuser1 = tempuser1.filter(usuario_id=id)
+
+    for x in tempuser1:
+        tempuser2 = historial.objects.all()
+        tempuser2 = tempuser2.filter(id=x.id)
+        tempuser2.delete()
+
+    tempuser1.delete()
+
+    tempuser3 = User.objects.get(id=id)
+    tempuser3.delete()
+
+    return True
+
+def crud_editar(id, texto):
+    tempuser1 = usuario_historial.objects.all()
+    tempuser1 = tempuser1.get(id=id)
+    temp = tempuser1.historial.pk
+
+    tempuser2 = historial.objects.all()
+    tempuser2 = tempuser2.filter(id=temp).update(busqueda=texto)
+
+    return True
+
+def crud_imprimir(lista):
+
+    doc = SimpleDocTemplate("form_letter.pdf",pagesize=letter,
+                        rightMargin=72,leftMargin=72,
+                        topMargin=72,bottomMargin=18)
+    
+
+    fileName = 'informe.pdf'
+    documentTitle = 'informe'
+    title = 'Historial'
+    subTitle = 'Busquedas'
+
+    pdf = canvas.Canvas(fileName) 
+    pdf.setTitle(documentTitle)
+    
+    pdf.setFont("Courier-Bold", 36) 
+    pdf.drawCentredString(300, 770, title)
+
+    pdf.setFillColorRGB(0, 0, 255) 
+    pdf.setFont("Courier-Bold", 24) 
+    pdf.drawCentredString(290, 720, subTitle)
+
+    pdf.line(30, 710, 550, 710) 
+    
+    text = pdf.beginText(40, 680) 
+    text.setFont("Courier", 18) 
+    text.setFillColor(colors.red) 
+
+    elementos = []
+    datos = []
+    datos.append("Usuario")
+    datos.append("Fecha")
+    datos.append("Busqueda")
+    for dato in lista:
+        datos.append(dato.usuario.username)
+        datos.append(dato.historial.fecha)
+        datos.append(dato.historial.busqueda)
+        #text.textLine(f"{dato.usuario}   {dato.historial.fecha}    {dato.historial.busqueda} ")
+
+    filas = int(len(datos) / 3)
+
+    
+    d=0
+    tabla=[]
+    for i in range(filas):
+        col = []
+        for j in range(3):
+            col.append(datos[d])
+            d += 1
+        tabla.append(col)
+    print(tabla)
+
+
+    tabla_i = Table(tabla)
+
+    tabla_i.wrapOn(pdf, 100, 100)
+    tabla_i.drawOn(pdf, 100, 200)
+    
+    pdf.drawText(text)
+    pdf.save() 
+
     return True
 
 def custom_404(request, exception):

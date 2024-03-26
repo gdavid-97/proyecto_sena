@@ -8,8 +8,6 @@ def verificar(nombre_usuario, clave):
 
         temp = str(contenido)
 
-        print(temp)
-
         if 'no' in temp:
             return False
         else:

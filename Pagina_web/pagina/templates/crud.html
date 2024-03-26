@@ -7,51 +7,67 @@
 <div class="container mb-5 pt-5 mt-5">
   {% if user.is_superuser %}
     <form id="form" method="post">
-        {% csrf_token %}
-        <select name="drop1" class="form-select m-5">
-            {% for i in userlist %} 
-                <option value="{{i}}">{{i}}</option>
-            {% endfor %}
-        </select>
-
-        <input type="submit" value="Consultar" name="btnform1" class="btn btn-light ">
-
-        <table class="table">
-          <tr>
-            <th scope="col">Usuario</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Busqueda</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-          {% for i in userselect %}
-          <tr>
-              <td scope="row">{{i.usuario}}</td>
-              <td>{{i.historial.fecha}}</td>
-              <td><textarea name = "textarea{{i.id}}">{{i.historial.busqueda}}</textarea></td>
-              <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}" action="crud/eliminar/" type="submit">Editar</button></td>
-              <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}" action="crud/eliminar/" type="submit">Eliminar</button></td>
-          </tr>
-          {% endfor %}
-        </table>
-
-        <div class="col">
-
-          <table table class="table"> 
-            <tr>
-              <th scope="col">Usuario</th>
-            </tr>
-            {% for i in userlist %} 
-            <tr>
-              <td>{{i}}</td>
-            </tr>
-            {% endfor %}
-            
-          </table>
-
+      {% csrf_token %}
+      <div class="container">
+        <div class="row align-items-center">
+          <select name="drop1" class="form-select m-5 col-sm">
+              {% for i in userlist %} 
+                  <option value="{{i}}">{{i}}</option>
+              {% endfor %}
+          </select>
+          <input type="submit" value="Consultar" name="btnform1" class="btn btn-primary col-auto">
         </div>
-      
+        <div class="row align-items-center">
+          <table class="table col-auto">
+            <tr scope="row">
+              <th scope="col">Usuario</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Busqueda</th>
+              <th scope="col">Editar</th>
+              <th scope="col">Eliminar</th>
+            </tr>
+            {% for i in userselect %}
+            <tr scope="row">
+                <td>{{i.usuario}}</td>
+                <td>{{i.historial.fecha}}</td>
+                <td><textarea name = "textarea" value="{{i.id}}">{{i.historial.busqueda}}</textarea></td>
+                <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}" action="crud/eliminar/" type="submit">Editar</button></td>
+                <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}" action="crud/eliminar/" type="submit">Eliminar</button></td>
+            </tr>
+            {% endfor %}
+          </table>
+          <button class="btn btn-primary col-auto" name="btnimprimir1" value="1">Imprimir</button>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-auto offset-md-auto">
+            <div class="table-responsive">
+              <table table class="table table-sm">
+                <tr>
+                  <th>Usuario</th>
+                </tr>
+                {% for i in userlist %} 
+                <tr class=" align-content-center">
+                  <td>{{i}}</td>
+                  <td><button name ="btneliminarusuario" class="btn btn-danger" value="{{i.id}}">Eliminar</button></td>
+                </tr>
+                {% endfor %}
+                
+              </table>
+            </div>
+          </div>
+        </div>
 
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+      </div>
     </form>
   {% endif %}
 
