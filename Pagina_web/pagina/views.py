@@ -171,10 +171,12 @@ def crud(request):
 
             f = s.getlist("btneditar")
             m = len(f)
+
             if m != 0:
                 t = s.getlist(f"textarea")
-                p = request.POST['textarea']
-                temporal= crud_editar(f[0], p)
+                temporal1= str(f[0])
+                l=temporal1.split("/")
+                temporal= crud_editar(l[0], t[int(l[1])-1])
                 if temporal == True:
                     messages.success(request, 'Busqueda editada')
 
