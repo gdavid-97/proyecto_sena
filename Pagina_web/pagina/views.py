@@ -105,6 +105,7 @@ def sugerencia(request):
         form = forms_sugerencia(request.POST)
         print(form.is_valid())
         if form.is_valid():
+            messages.success(request, 'Comentario Registrado')
             form.save()
     else:
         form = forms_sugerencia()
@@ -158,8 +159,8 @@ def crud(request):
             temp = request.POST['drop1']
             tempuser = User.objects.get(username=temp)
 
-            tempuser1 = usuario_historial.objects.all()
-            tempuser1 = tempuser1.filter(usuario_id=tempuser.pk)
+            tempuser3 = usuario_historial.objects.all()
+            tempuser1 = tempuser3.filter(usuario_id=tempuser.pk)
 
             f = s.getlist("btneliminarusuario")
             m = len(f)
@@ -172,7 +173,8 @@ def crud(request):
             m = len(f)
             if m != 0:
                 t = s.getlist(f"textarea")
-                temporal= crud_editar(f[0], t[m])
+                p = request.POST['textarea']
+                temporal= crud_editar(f[0], p)
                 if temporal == True:
                     messages.success(request, 'Busqueda editada')
 
@@ -186,7 +188,7 @@ def crud(request):
             f=s.getlist("btnimprimir1")
             m = len(f)
             if m != 0:
-                temporal = crud_imprimir(tempuser1)
+                temporal = crud_imprimir(tempuser3)
                 if temporal == True:
                     messages.success(request, 'Informe realizado')
 
@@ -274,7 +276,6 @@ def crud_imprimir(lista):
     text.setFont("Courier", 18) 
     text.setFillColor(colors.red) 
 
-    elementos = []
     datos = []
     datos.append("Usuario")
     datos.append("Fecha")
@@ -305,7 +306,7 @@ def crud_imprimir(lista):
     tabla_i.drawOn(pdf, 100, 200)
     
     pdf.drawText(text)
-    pdf.save() 
+    pdf.save()
 
     return True
 

@@ -30,7 +30,7 @@
             <tr scope="row">
                 <td>{{i.usuario}}</td>
                 <td>{{i.historial.fecha}}</td>
-                <td><textarea name = "textarea" value="{{i.id}}">{{i.historial.busqueda}}</textarea></td>
+                <td><textarea name = "textarea" value="{{ forloop.counter }}">{{i.historial.busqueda}}</textarea></td>
                 <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}" action="crud/eliminar/" type="submit">Editar</button></td>
                 <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}" action="crud/eliminar/" type="submit">Eliminar</button></td>
             </tr>

@@ -24,13 +24,13 @@
                 <input
                   type="text"
                   class="form-control"
-                  id="floatingInputUsername"
+                  id="usuarioflotante"
                   placeholder="Usuario"
                   name="usuario"
                   required
                   autofocus
                 />
-                <label for="floatingInputUsername">Usuario</label>
+                <label for="usuarioflotante">Usuario</label>
               </div>
 
               <hr />
@@ -39,11 +39,11 @@
                 <input
                   type="password"
                   class="form-control"
-                  id="floatingPassword"
+                  id="claveflotante"
                   placeholder="Contraseña"
                   name ="contrasena"
                 />
-                <label for="floatingPassword">Contraseña</label>
+                <label for="claveflotante">Contraseña</label>
               </div>
 
               <div class="d-grid mb-2">
@@ -65,7 +65,7 @@
                 {% for message in messages %}
                   <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close p-3" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                 {% endfor %}
               {% endif %}
