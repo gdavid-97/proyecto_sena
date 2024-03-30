@@ -12,11 +12,11 @@ BG_COLOR_FONT = '#666a88'
 class App:
 
     def verificar(self):
-        usua = self.usuario.get()
+        usuario = self.usuario.get()
         clave = self.clave.get()
-        if(conexion.verificar(nombre_usuario=usua, clave=clave)):
+        if(conexion.verificar(nombre_usuario=usuario, clave=clave)):
             self.ventana.destroy()
-            MasterPanel()
+            MasterPanel(usuario, clave)
         else:
             messagebox.showerror(message="La contraseña o usuario no es correcto", title="Mensaje") 
 

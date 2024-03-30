@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter.font import BOLD
 import util.generico as util
 
+import sys
+import concurrent.futures 
+
 BG_COLOR = '#22A4E0'
 BG_COLOR_FONT = '#E6DC75'
 
@@ -20,43 +23,133 @@ login = True
 ciclo = False
 
 
+
 class MasterPanel:
 
-    def __init__(self):
+    query = ""
 
-        width=600
-        height=700
+    def escribir(self, msg):
+        self.texto.config(cursor='arrow', state="normal")
+        self.texto.insert(tk.END, msg)
+        self.texto.insert(tk.END, '\n')
+        self.texto.config(cursor='arrow', state="disabled")
+
+    def paralelo(self, texto):
+        self.escribir(texto)
+        util.hablar(texto)
+
+
+
+    def funcion(self):
+        self.query = util.escuchar()
+        self.funciona()
+        
+
+
+    def funcion1(self):
+        self.query = self.texto1.get("1.0","end")
+        self.funciona()
+
+
+    def funciona(self):
+
+        query = self.query
+
+        if ' ip ' in query:
+            direccion_ip = onlines.buscar_ip()
+            util.paralelo(f'Su Dirección IP es {direccion_ip}')
+            print(f'Tu direccion IP es {direccion_ip}')
+            
+        elif ' whatsapp ' in query:
+            util.hablar('¿A qué número debería enviar el mensaje?, por favor, digítelo en la consola: ')
+            number = input("Ingrese el número: ")
+            util.hablar("¿Cúal es el mensaje?")
+            message = input("-->")
+            onlines.enviar_whatsapp(number, message)
+            util.hablar("El mensaje ha sido enviado")
+
+        elif ' wikipedia ' in query:
+
+            query = query.split("wikipedia")
+            query = query[1]
+
+            temp = onlines.buscar_wikipedia(query)
+            util.paralelo(temp)
+            print()
+
+        elif ' youtube 'in query:
+            query = query.split("youtube")
+            query = query[1]
+            onlines.youtube(query)
+
+        elif ' noticias 'in query:
+            temp = onlines.noticias()
+
+            self.texto.insert(tk.END, temp)
+
+            self.texto1.delete('1.0',tk.END)
+
+            print(temp)
+            util.hablar(temp)
+
+        else:
+            print("Procesando...")
+            try:
+                temp = onlines.ai(query)
+
+                self.paralelo(temp[0])
+
+                self.texto1.delete('1.0',tk.END)
+
+                print()
+            except Exception as e:
+                print(f'{type(e).__name__}: {e}')
+
+
+    def __init__(self, clave, usuario):
         self.ventana = tk.Tk()
         self.ventana.title('principal')
-        self.ventana.config(bg='#fcfcfc', width=width,height=height)
+        self.ventana.config(bg='#fcfcfc', width=600, height=700)
         self.ventana.resizable(width=0, height=0)
-        util.centar_ventana(self.ventana, width, height)
+        util.centar_ventana(self.ventana, 600, 700)
+        
+        self.chat = tk.Frame(self.ventana, bg=BG_COLOR, width=600, height= 600)
+        self.chat.pack(side='top',fill=tk.NONE, expand=tk.NO)
 
-
-        chat = tk.Frame(self.ventana, bg=BG_COLOR, width=600, height= 600)
-        chat.pack(side='top',fill=tk.BOTH, expand=tk.NO)
-
-        self.texto = tk.Text(chat, width=20, height=2, bg=BG_COLOR, fg=BG_COLOR_FONT, font= FONT, padx=5, pady=5)
+        self.texto = tk.Text(self.chat, width=20, height=2, bg=BG_COLOR, fg=BG_COLOR_FONT, font= FONT, padx=5, pady=5)
         self.texto.place(relwidth=0.745, relheight=0.9, rely=0.08, relx=0.08)
 
-        self.texto.config(cursor='arrow', state='disabled')
+        self.texto.config(cursor='arrow', state="disabled")
 
-        scroolbar = tk.Scrollbar(self.texto)
-        scroolbar.place(relheight=1, relx=0.974)
-        scroolbar.configure(command=self.texto.yview)
+        """
+        self.scroolbar = tk.Scrollbar(self.texto)
+        self.scroolbar.place(relheight=1, relx=0.974)
+        self.scroolbar.configure(command=self.texto.yview)
+        """
 
-        abajo = tk.Frame(self.ventana, bg=BG_COLOR, width=600, height= 50)
-        abajo.pack(side='bottom',expand=tk.NO, fill=tk.X)
+        self.abajo = tk.Frame(self.ventana, bg=BG_COLOR, width=600, height= 100)
+        self.abajo.pack(side='bottom', expand=tk.NO, fill=tk.NONE)
+        
+        boton1 = tk.Button(self.abajo, text="Audio", font= FONT, command=self.funcion)
+        boton1.grid(column=0, row=0, sticky="nsew")
+        boton1.bind('<Return>', (lambda event: self.funcion()))
 
-        boton1 = tk.Button(abajo, text="Audio", fg=BG_COLOR_FONT, height=50)
-        boton1.grid(column=1, row=1)
+        self.texto1 = tk.Text(self.abajo, bg=BG_COLOR, fg=BG_COLOR_FONT, font= FONT, padx=5, pady=5, width=52)
+        self.texto1.grid(column=1, row=0, sticky="nsew")
+        
+        self.boton2 = tk.Button(self.abajo, text="Enviar", font= FONT, command=self.funcion1)
+        self.boton2.grid(column=2, row=0, sticky="nsew")
+        self.boton2.bind('<Return>', (lambda event: self.funcion1()))
+        
+        self.abajo.grid_columnconfigure(0, weight=0)
+        self.abajo.grid_columnconfigure(1, weight=0)
+        self.abajo.grid_columnconfigure(2, weight=0)
 
-        texto1 = tk.Text(abajo, height=50, bg=BG_COLOR, fg=BG_COLOR_FONT, font= FONT, padx=5, pady=5)
-        texto1.grid(column=2, row=1)
+        self.abajo.grid_rowconfigure(0, weight=1)
 
-        boton2 = tk.Button(abajo, text="Enviar", height=50)
-        boton2.grid(column=3, row=1)
+        #util.saludar()
 
-        util.saludar()
+        if self.query != '':
+            self.funciona()
 
         self.ventana.mainloop()

@@ -3,6 +3,7 @@ from functions import onlines
 import util.generico as util
 
 from grafico.inicio import App
+from grafico.principal import MasterPanel
 
 def sin_grafico():
     usuario=""
@@ -63,7 +64,6 @@ def sin_grafico():
 
                 temp = onlines.buscar_wikipedia(query)
                 util.paralelo(temp)
-                print()
 
             elif ' youtube 'in query:
                 query = query.split("youtube")
