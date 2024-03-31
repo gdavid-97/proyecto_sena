@@ -27,6 +27,8 @@ ciclo = False
 class MasterPanel:
 
     query = ""
+    usuario = ""
+    clave = ""
 
     def escribir(self, msg):
         self.texto.config(cursor='arrow', state="normal")
@@ -55,58 +57,57 @@ class MasterPanel:
 
         query = self.query
 
+        conexion.enviar_historial(self.usuario, self.clave, str(query))
+
         if ' ip ' in query:
             direccion_ip = onlines.buscar_ip()
-            util.paralelo(f'Su Dirección IP es {direccion_ip}')
-            print(f'Tu direccion IP es {direccion_ip}')
+            self.paralelo(f'Su Dirección IP es {direccion_ip}')
             
-        elif ' whatsapp ' in query:
-            util.hablar('¿A qué número debería enviar el mensaje?, por favor, digítelo en la consola: ')
+        elif 'whatsapp' in query:
+            self.paralelo('¿A qué número debería enviar el mensaje?, por favor, digítelo en la consola: ')
             number = input("Ingrese el número: ")
-            util.hablar("¿Cúal es el mensaje?")
+            self.paralelo("¿Cúal es el mensaje?")
             message = input("-->")
             onlines.enviar_whatsapp(number, message)
-            util.hablar("El mensaje ha sido enviado")
+            self.paralelo("El mensaje ha sido enviado")
 
-        elif ' wikipedia ' in query:
-
+        elif 'wikipedia' in query:
             query = query.split("wikipedia")
             query = query[1]
-
             temp = onlines.buscar_wikipedia(query)
-            util.paralelo(temp)
-            print()
+            self.paralelo(temp)
 
-        elif ' youtube 'in query:
+        elif 'youtube'in query:
             query = query.split("youtube")
             query = query[1]
             onlines.youtube(query)
 
-        elif ' noticias 'in query:
+        elif 'noticias'in query:
             temp = onlines.noticias()
-
-            self.texto.insert(tk.END, temp)
-
+            self.paralelo(temp)
             self.texto1.delete('1.0',tk.END)
-
-            print(temp)
-            util.hablar(temp)
+        
+        elif 'clima' in query:
+            city = "Bogotá"
+            self.paralelo(f"Obteneniendo el informe meteorológico de la ciudad de {city}")
+            clima, temperatura, feels_like = onlines.clima(city)
+            self.paralelo(f"La temperatura es {temperatura}, pero se siente como {feels_like}")
+            self.paralelo(f"el parte meteorológico habla de {clima}")
 
         else:
             print("Procesando...")
             try:
                 temp = onlines.ai(query)
-
                 self.paralelo(temp[0])
-
                 self.texto1.delete('1.0',tk.END)
 
-                print()
             except Exception as e:
                 print(f'{type(e).__name__}: {e}')
 
 
     def __init__(self, clave, usuario):
+        self.usuario = usuario
+        self.clave = clave
         self.ventana = tk.Tk()
         self.ventana.title('principal')
         self.ventana.config(bg='#fcfcfc', width=600, height=700)

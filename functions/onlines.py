@@ -10,6 +10,7 @@ EMAIL = config("EMAIL")
 CONTRASEÑA = config("PASSWORD")
 GOOGLE_API_KEY = config('GOOGLE_API_KEY')
 NEWS_API_KEY = config("NEWS_API_KEY")
+OPENWEATHER_APP_ID = config("OPENWEATHER_APP_ID")
 
 def buscar_wikipedia(query):
     wikipedia.set_lang('es')
@@ -47,6 +48,14 @@ def enviar_email(destinatario, asunto, mensaje):
         print(e)
         return False
     
+def clima(city):
+    res = requests.get(
+        f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_APP_ID}&units=metric&lang=es").json()
+    clima = res["weather"][0]["main"]
+    temperatura = res["main"]["temp"]
+    feels_like = res["main"]["feels_like"]
+    return clima, f"{temperatura}℃", f"{feels_like}℃"
+
 
 def noticias():
     news_headlines = []

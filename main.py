@@ -1,6 +1,7 @@
 import conexion
 from functions import onlines
 import util.generico as util
+import requests
 
 from grafico.inicio import App
 from grafico.principal import MasterPanel
@@ -49,7 +50,7 @@ def sin_grafico():
                 util.paralelo(f'Su Dirección IP es {direccion_ip}')
                 print(f'Tu direccion IP es {direccion_ip}')
             
-            elif ' whatsapp ' in query:
+            elif 'whatsapp' in query:
                 util.hablar('¿A qué número debería enviar el mensaje?, por favor, digítelo en la consola: ')
                 number = input("Ingrese el número: ")
                 util.hablar("¿Cúal es el mensaje?")
@@ -57,7 +58,7 @@ def sin_grafico():
                 onlines.enviar_whatsapp(number, message)
                 util.hablar("El mensaje ha sido enviado")
 
-            elif ' wikipedia ' in query:
+            elif 'wikipedia' in query:
 
                 query = query.split("wikipedia")
                 query = query[1]
@@ -65,15 +66,25 @@ def sin_grafico():
                 temp = onlines.buscar_wikipedia(query)
                 util.paralelo(temp)
 
-            elif ' youtube 'in query:
+            elif 'youtube'in query:
                 query = query.split("youtube")
                 query = query[1]
                 onlines.youtube(query)
 
-            elif ' noticias 'in query:
+            elif 'noticias'in query:
                 temp = onlines.noticias()
                 print(temp)
                 util.hablar(temp)
+
+            elif 'clima' in query:
+                city = "Bogotá"
+                util.paralelo(f"Obteneniendo el informe meteorológico de la ciudad de {city}")
+                print()
+                clima, temperatura, feels_like = onlines.clima(city)
+                util.paralelo(f"La temperatura es {temperatura}, pero se siente como {feels_like}")
+                print()
+                util.paralelo(f"el parte meteorológico habla de {clima}")
+                print()
 
             else:
                 print("Procesando...")
