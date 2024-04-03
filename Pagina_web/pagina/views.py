@@ -156,11 +156,20 @@ def crud(request):
     if request.method == 'POST':
         try:
             s = request.POST
+            
+            f = s.getlist('btnform1')
+            m = len(f)
+            if m != 0:
+                temp = s.getlist('drop1')
+
+
             temp = request.POST['drop1']
             tempuser = User.objects.get(username=temp)
 
             tempuser3 = usuario_historial.objects.all()
             tempuser1 = tempuser3.filter(usuario_id=tempuser.pk)
+
+            
 
             f = s.getlist("btneliminarusuario")
             m = len(f)
@@ -190,14 +199,30 @@ def crud(request):
             f=s.getlist("btnimprimir1")
             m = len(f)
             if m != 0:
-                temporal = crud_imprimir(tempuser3)
+                temporal = crud_imprimir(tempuser1)
                 if temporal == True:
                     messages.success(request, 'Informe realizado')
+
+            temp = s.getlist('drop1')
+            temp = temp[0]
+            t = User.objects.all().exclude(id=1)
+            n = 0
+            m = 0
+            for x in t:
+                m += 1
+                k = str(x)
+                temp1 = k.replace("  ","")
+                temp2 = temp.replace("  ","")
+                if temp1 == temp2:
+                    n = m
+                    print(m)
 
 
             context={
                 'userlist':User.objects.all().exclude(id=1),
-                'userselect': tempuser1
+                'userselect': tempuser1,
+                'temp': temp,
+                'vuelta': n
             }
             response = render(request,"crud.html", context)
         except Exception as e:
@@ -284,7 +309,7 @@ def crud_imprimir(lista):
     datos.append("Busqueda")
     for dato in lista:
         datos.append(dato.usuario.username)
-        datos.append(dato.historial.fecha)
+        datos.append(dato.historial.fecha.ctime())
         datos.append(dato.historial.busqueda)
         #text.textLine(f"{dato.usuario}   {dato.historial.fecha}    {dato.historial.busqueda} ")
 
@@ -302,7 +327,7 @@ def crud_imprimir(lista):
     print(tabla)
 
 
-    tabla_i = Table(tabla)
+    tabla_i = Table(tabla, spaceBefore=2*inch, spaceAfter=2*inch)
 
     tabla_i.wrapOn(pdf, 100, 100)
     tabla_i.drawOn(pdf, 100, 200)

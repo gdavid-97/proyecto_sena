@@ -12,7 +12,7 @@
         <div class="row align-items-center">
           <select name="drop1" class="form-select m-5 col-sm">
               {% for i in userlist %} 
-                  <option value="{{i}}">{{i}}</option>
+                  <option value="{{i}}" {%if forloop.counter == vuelta %} selected{% endif %}>{{i}}</option>
               {% endfor %}
           </select>
           <input type="submit" value="Consultar" name="btnform1" class="btn btn-primary col-auto">

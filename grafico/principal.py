@@ -148,7 +148,7 @@ class MasterPanel:
 
         self.abajo.grid_rowconfigure(0, weight=1)
 
-        #util.saludar()
+        util.saludar()
 
         if self.query != '':
             self.funciona()
