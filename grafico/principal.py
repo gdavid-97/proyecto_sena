@@ -57,6 +57,8 @@ class MasterPanel:
 
         query = self.query
 
+        print(query, self.usuario, self.clave)
+
         conexion.enviar_historial(self.usuario, self.clave, str(query))
 
         if ' ip ' in query:
@@ -105,7 +107,7 @@ class MasterPanel:
                 print(f'{type(e).__name__}: {e}')
 
 
-    def __init__(self, clave, usuario):
+    def __init__(self, usuario, clave):
         self.usuario = usuario
         self.clave = clave
         self.ventana = tk.Tk()

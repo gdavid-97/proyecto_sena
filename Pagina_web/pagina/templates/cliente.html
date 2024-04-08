@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% extends "core.html" %} {% load static %} 
+{% block title %} <title>CRUD</title> {% endblock %}
+
+
+{% block content %}
+<div class="container mb-5 pt-5 mt-5 d-flex justify-content-center">
+    {% if user.is_authenticated %}
+    <div class="row align-items-center">
+      <table class="table col-auto">
+        <tr scope="row">
+          <th scope="col">Usuario</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Busqueda</th>
+        </tr>
+        {% for i in userselect %}
+        <tr scope="row">
+            <td>{{i.usuario}}</td>
+            <td>{{i.historial.fecha}}</td>
+            <td><textarea name = "textarea" readonly>{{i.historial.busqueda}}</textarea></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <button class="btn btn-primary col-auto" name="btnimprimir1" value="1">Imprimir</button>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show mt-2" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

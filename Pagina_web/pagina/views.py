@@ -23,6 +23,9 @@ from reportlab.platypus.tables import Table
 from reportlab.lib.units import inch, mm
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
+import google.generativeai as genai
+
+google_api_key = settings.GOOGLE_API_KEY
 api_key_maps = settings.GOOGLE_MAPS_API_KEY
 
 def principal(request):
@@ -77,6 +80,9 @@ def crear_cuenta(request):
             elif User.objects.filter(username=temp_usuario).exists():
                 messages.warning(request, 'Usuario ya utilizado')
                 return redirect('crear_cuenta')
+            elif len(temp_password1) < 8 or verificar_clave(temp_password1):
+                messages.warning(request, 'Contraseña no valida')
+                return redirect('crear_cuenta')
             else:
                 user = User.objects.create_user(username=temp_usuario, email=temp_email, password=temp_password1, is_staff=False)
                 
@@ -89,7 +95,7 @@ def crear_cuenta(request):
             
         else:
             messages.warning(request, 'contraseñas no coinciden')
-            return redirect('crear_cuenta')
+            return redirect('usuario')
 
     context={
         
@@ -117,6 +123,23 @@ def cerrar_sesion(request):
     logout(request)
     return redirect('home')
 
+def usuario(request):
+    name = request.user
+    User = get_user_model()
+    tempuser = User.objects.get(username=name)
+    temph = usuario_historial.objects.filter(usuario_id=tempuser.pk)
+
+    f=request.POST.getlist("btnimprimir1")
+    m = len(f)
+    if m != 0:
+        temporal = crud_imprimir(temph)
+        if temporal == True:
+            messages.success(request, 'Informe realizado')
+
+    context={
+        'userselect': temph
+    }
+    return render(request,"cliente.html", context)   
 
 def verificar_usuario(request, nombre_usuario, clave):
     if request.method == 'GET':
@@ -141,9 +164,6 @@ def agregar_historial(request, nombre_usuario, clave, informacion):
 
             return HttpResponse("<h1>si</h1>")
     
-            
-            
-
 def tomar_historial(request, informacion):
     if request.method == 'GET':
         User = get_user_model()
@@ -215,7 +235,6 @@ def crud(request):
                 temp2 = temp.replace("  ","")
                 if temp1 == temp2:
                     n = m
-                    print(m)
 
 
             context={
@@ -336,6 +355,84 @@ def crud_imprimir(lista):
     pdf.save()
 
     return True
+
+def verificar_clave(clave):
+    cadena = []
+ 
+    for letra in clave:
+        cadena.append(letra)
+        temp = ord(letra)
+        if (temp<= 63 or temp >=90) or (temp<=96 or temp>=122):
+            return True
+
+    return False
+
+def chat(request):
+    if request.method == 'POST':
+        query = request.POST['prompt']
+        User = get_user_model()
+        try:
+            response = ai(query)
+            user = request.user
+            tempuser = User.objects.get(username=user)
+            temph = historial(busqueda = query, usuario = tempuser)
+            temph.save()
+            tempuh= usuario_historial(historial_id=temph.pk,usuario_id=tempuser.pk)
+            tempuh.save()
+            response = str(response)
+            response = response.split('\\n')
+
+
+            print(response)
+
+
+        except Exception as e:
+            print(f'{type(e).__name__}: {e}')
+
+        context={
+            'query': response
+        }
+        return render(request,"chat.html", context)  
+
+    return render(request,"chat.html")        
+
+def ai(query):
+    print(google_api_key)
+    genai.configure(api_key = google_api_key)
+    model = genai.GenerativeModel(model_name = 'gemini-pro')
+    prompt = query
+    safety_settings = [
+    {
+        "category": "HARM_CATEGORY_DANGEROUS",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_NONE",
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_NONE",
+    },
+    ]
+    response = model.generate_content(
+        contents=prompt, 
+        safety_settings=safety_settings
+        )
+    
+    try:
+        for candidate in response.candidates:
+            return [part.text for part in candidate.content.parts]
+    except Exception as e:
+        print(f'{type(e).__name__}: {e}')
 
 def custom_404(request, exception):
     return render(request, '404.html', status=404)

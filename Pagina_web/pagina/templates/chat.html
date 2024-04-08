@@ -1,0 +1,36 @@
+<!DOCTYPE html> {% extends "core.html" %} {% load static %} {% block title %}
+<title>CRUD</title> {% endblock %} {% block scripts %}
+<link rel="stylesheet" href="{% static '/css/estilo-chat.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="container mb-5 pt-5 mt-5 d-flex justify-content-center">
+  {% if user.is_authenticated %}
+
+  <div class="container p-3">
+    <div class="mb-3">
+        <form method="post">
+            {% csrf_token %}
+            <label for="prompt" class="form-label"><strong>Prompt: </strong></label>
+            <textarea class="form-control" type="textarea" id="prompt" name="prompt" rows="3"></textarea>
+            <br>
+            <button class="btn btn-primary" type="submit">enviar</button>
+        </form>
+    </div>
+    <br>
+    <div class="mb-3">
+        <h6>Respuesta:</h6> 
+        <div class="container border overflow-auto h-50" id="respuesta">
+            {% for i in query %}
+                {{ i }}
+                <br>
+            {% endfor %}
+        </div>
+        
+    </div>
+    </div>
+
+  
+
+  {% endif %}
+</div>
+{% endblock %}

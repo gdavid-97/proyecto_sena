@@ -21,6 +21,7 @@ def enviar_historial(nombre_usuario, clave, historial):
 
     try:
         historial = historial.replace(" ", "%20")
+        print(historial)
         contenido = urllib.request.urlopen(f"http://127.0.0.1:8000/historial/{nombre_usuario}/{clave}/{historial}").read()
 
         temp = str(contenido)

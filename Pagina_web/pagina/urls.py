@@ -10,5 +10,7 @@ urlpatterns = [
     path('logout', views.cerrar_sesion, name="logout"),
     path('check/<str:nombre_usuario>/<int:clave>', views.verificar_usuario, name="check"),
     path('historial/<str:nombre_usuario>/<int:clave>/<str:informacion>', views.agregar_historial, name="agregar_historial"),
-    path('crud/', views.crud, name="crud")
+    path('crud/', views.crud, name="crud"),
+    path('usuario/', views.usuario, name="usuario"),
+    path('chat', views.chat, name="chat")
 ]

@@ -4,7 +4,7 @@
 
 
 {% block content %}
-<div class="container mb-5 pt-5 mt-5">
+<div class="container mb-5 pt-5 mt-5 d-flex justify-content-center">
   {% if user.is_superuser %}
     <form id="form" method="post">
       {% csrf_token %}
@@ -30,7 +30,7 @@
             <tr scope="row">
                 <td>{{i.usuario}}</td>
                 <td>{{i.historial.fecha}}</td>
-                <td><textarea name = "textarea" value="{{forloop.counter}}">{{i.historial.busqueda}}</textarea></td>
+                <td><textarea name = "textarea" class="form-control" value="{{forloop.counter}}">{{i.historial.busqueda}}</textarea></td>
                 <td><button name ="btneditar" class="btn btn-warning" value="{{i.id}}/{{forloop.counter}}" type="submit">Editar</button></td>
                 <td><button name ="btneliminar" class="btn btn-danger" value="{{i.id}}" type="submit">Eliminar</button></td>
             </tr>
@@ -38,8 +38,16 @@
           </table>
           <button class="btn btn-primary col-auto" name="btnimprimir1" value="1">Imprimir</button>
         </div>
-        <div class="row justify-content-center">
-          <div class="col-auto offset-md-auto">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert {{ message.tags }} alert-dismissible fade show mt-2" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        <div class="row justify-content-center mb-5">
+          <div class="col-auto offset-md-auto mb-5">
             <div class="table-responsive">
               <table table class="table table-sm">
                 <tr>
@@ -56,20 +64,8 @@
             </div>
           </div>
         </div>
-
-
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
-              {{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          {% endfor %}
-        {% endif %}
-
       </div>
     </form>
   {% endif %}
-
 </div>
 {% endblock %}
